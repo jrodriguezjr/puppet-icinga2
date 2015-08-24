@@ -2,10 +2,10 @@
 #
 class icinga2::install::packages {
   # Install the Icinga 2 package
-#  package { $::icinga2::icinga2_package:
-#    ensure   => installed,
-#    provider => $::icinga2::package_provider,
-#  }
+ package { $::icinga2::icinga2_package:
+   ensure   => installed,
+   provider => $::icinga2::package_provider,
+ }
 
 #  if $::icinga2::install_nagios_plugins == true {
 #    # Install the Nagios plugins packages:

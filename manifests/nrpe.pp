@@ -4,29 +4,31 @@
 # icinga2::nrpe:: subclasses.
 #
 class icinga2::nrpe (
-  $icinga2_client_packages                = $::icinga2::icinga2_client_packages,
-  $nrpe_allow_command_argument_processing = $::icinga2::nrpe_allow_command_argument_processing,
-  $nrpe_allowed_hosts                     = $::icinga2::nrpe_allowed_hosts,
-  $nrpe_command_timeout                   = $::icinga2::nrpe_command_timeout,
-  $nrpe_connection_timeout                = $::icinga2::nrpe_connection_timeout,
-  $nrpe_debug_level                       = $::icinga2::nrpe_debug_level,
-  $nrpe_listen_port                       = $::icinga2::nrpe_listen_port,
-  $nrpe_log_facility                      = $::icinga2::nrpe_log_facility,
-  $nrpe_pid_file_path                     = $::icinga2::nrpe_pid_file_path,
-  $nrpe_purge_unmanaged                   = $::icinga2::nrpe_purge_unmanaged,
-) {
-  require ::icinga2
 
+  $checkplugin_libdir                     = $::icinga2::params::checkplugin_libdir,
+  $icinga2_client_packages                = $::icinga2::params::icinga2_client_packages,
+  $nrpe_log_facility                      = $::icinga2::params::nrpe_log_facility,
+  $nrpe_pid_file_path                     = $::icinga2::params::nrpe_pid_file_path,
+  $nrpe_listen_port                       = $::icinga2::params::nrpe_listen_port,
+  $nrpe_user                              = $::icinga2::params::nrpe_user,
+  $nrpe_group                             = $::icinga2::params::nrpe_group,
+  $nrpe_allowed_hosts                     = $::icinga2::params::nrpe_allowed_hosts,
+  $nrpe_allow_command_argument_processing = $::icinga2::params::nrpe_allow_command_argument_processing,
+  $nrpe_debug_level                       = $::icinga2::params::nrpe_debug_level,
+  $nrpe_command_timeout                   = $::icinga2::params::nrpe_command_timeout,
+  $nrpe_connection_timeout                = $::icinga2::params::nrpe_connection_timeout,
+  $nrpe_config_basedir                    = $::icinga2::params::nrpe_config_basedir,
+  $nrpe_command_prefix                    = $::icinga2::params::nrpe_command_prefix
+) inherits ::icinga2::params {
+  
   #Do some validation of the parameters that are passed in:
-  #validate_array($nrpe_allowed_hosts)
+  validate_array($nrpe_allowed_hosts)
   validate_string($nrpe_log_facility)
+  validate_bool($nrpe_command_prefix)
 
-  #Apply our classes in the right order. Use the squiggly arrows (~>) to ensure that the
-  #class left is applied before the class on the right and that it also refreshes the
-  #class on the right.
-  class {'::icinga2::nrpe::install':} ->
-  class {'::icinga2::nrpe::config':} ~>
-  class {'::icinga2::nrpe::service':} ->
-  Class['::icinga2::nrpe']
+  #Apply our classes in the right order. 
+  contain ::icinga2::nrpe::install
+  contain ::icinga2::nrpe::config
+  contain ::icinga2::nrpe::service
 }
 

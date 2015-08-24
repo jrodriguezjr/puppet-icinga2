@@ -11,7 +11,7 @@
 #
 define icinga2::nrpe::command (
   $command_name       = $name,
-  $nrpe_plugin_libdir = $::icinga2::nrpe_plugin_libdir,
+  $nrpe_plugin_libdir = $::icinga2::nrpe::nrpe_plugin_libdir,
   $nrpe_plugin_name   = undef,
   $nrpe_plugin_args   = undef,
 ) {

@@ -51,13 +51,18 @@ class icinga2::params {
   $nrpe_listen_port        = '5666'
   $nrpe_log_facility       = 'daemon'
   $nrpe_debug_level        = '0'
+  
   #in seconds:
   $nrpe_command_timeout    = '60'
+  
   #in seconds:
   $nrpe_connection_timeout = '300'
+  
   #Note: because we use .join in the nrpe.cfg.erb template, this value *must* be an array
   $nrpe_allowed_hosts      = ['127.0.0.1']
+  
   #Determines whether or not the NRPE daemon will allow clients to specify arguments to commands that are executed
+  
   # *** ENABLING THIS OPTION IS A SECURITY RISK! ***
   # Defaults to NOT allow command arguments
   $nrpe_allow_command_argument_processing = '0'
@@ -65,6 +70,7 @@ class icinga2::params {
   # Whether or not to purge nrpe config files NOT managed by Puppet.
   $nrpe_purge_unmanaged = false
 
+  $nrpe_command_prefix = false
 
   ##################
   # Icinga 2 parameters by OS/release
@@ -77,6 +83,7 @@ class icinga2::params {
 
       #Packages for Nagios plugins:
       $nagios_plugin_packages = ['nagios-plugins-nrpe', 'nagios-plugins-all', 'nagios-plugins-openmanage', 'nagios-plugins-check-updates']
+      
       #Package that provides a 'mail' binary:
       $mail_package = 'mailx'
       $nagios_plugin_package_install_options = undef
@@ -87,18 +94,22 @@ class icinga2::params {
       $config_mode  = '0640'
 
       # Icinga2 client settings
-      $nrpe_config_basedir = '/etc/nagios'
-      $nrpe_plugin_libdir  = '/usr/lib64/nagios/plugins'
-      $checkplugin_libdir  = '/usr/lib64/nagios/plugins'
-      $nrpe_pid_file_path  = '/var/run/nrpe/nrpe.pid'
-      $nrpe_user           = 'nrpe'
-      $nrpe_group          = 'nrpe'
-      $nrpe_daemon_name = 'nrpe'
-      $icinga2_client_packages = ['nrpe', 'nagios-plugins-nrpe', 'nagios-plugins-all', 'nagios-plugins-openmanage', 'nagios-plugins-check-updates']
-
+      $nrpe_config_basedir      = '/etc/nagios'
+      $nrpe_plugin_libdir       = '/usr/lib64/nagios/plugins'
+      $checkplugin_libdir       = '/usr/lib64/nagios/plugins'
+      $nrpe_pid_file_path       = '/var/run/nrpe/nrpe.pid'
+      $nrpe_user                = 'nrpe'
+      $nrpe_group               = 'nrpe'
+      $nrpe_daemon_name         = 'nrpe'
+      $icinga2_client_packages  = [ 'nrpe', 
+                                    'nagios-plugins-nrpe', 
+                                    'nagios-plugins-all', 
+                                    'nagios-plugins-openmanage', 
+                                    'nagios-plugins-check-updates'
+                                  ]
+      $nrpe_sudo_command        = '/bin/sudo'
     }
     'Ubuntu': {
-
       #Pick the right package provider:
       $icinga2_package = 'icinga2'
       $package_provider = 'apt'
@@ -118,6 +129,7 @@ class icinga2::params {
       $nrpe_user            = 'nagios'
       $nrpe_group           = 'nagios'
       $nrpe_daemon_name     = 'nagios-nrpe-server'
+      $nrpe_sudo_command    = '/usr/bin/sudo'
       $client_plugin_package_install_options = '--no-install-recommends'
 
       case $::operatingsystemrelease {
@@ -139,7 +151,6 @@ class icinga2::params {
     }
 
     'Debian': {
-
       #Pick the right package provider:
       $icinga2_package = 'icinga2'
       $package_provider = 'apt'
@@ -160,6 +171,8 @@ class icinga2::params {
       $nrpe_user            = 'nagios'
       $nrpe_group           = 'nagios'
       $nrpe_daemon_name     = 'nagios-nrpe-server'
+      $nrpe_sudo_command    = '/usr/bin/sudo'
+
       $icinga2_client_packages = ['nagios-nrpe-server', 'nagios-plugins', 'nagios-plugins-basic', 'nagios-plugins-standard', 'nagios-snmp-plugins', 'nagios-plugins-contrib', 'nagios-nrpe-plugin']
       $client_plugin_package_install_options = '--no-install-recommends'
     }

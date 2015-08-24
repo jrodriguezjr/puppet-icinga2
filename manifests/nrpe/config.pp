@@ -3,11 +3,10 @@
 # This subclass configures Icinga clients.
 #
 class icinga2::nrpe::config {
-  require ::icinga2
-  require ::icinga2::nrpe::install
+  include ::icinga2::nrpe::install
 
   #The NRPE configuration base directory:
-  file { $::icinga2::nrpe_config_basedir:
+  file { $::icinga2::nrpe::nrpe_config_basedir:
     ensure => directory,
     owner  => 'root',
     group  => 'root',
